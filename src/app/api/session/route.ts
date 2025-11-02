@@ -4,10 +4,7 @@ import { db } from '@/db/client';
 import { users, sessions } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export async function GET() {
-  // sanity check endpoint
-  return NextResponse.json({ ok: true, route: 'session' });
-}
+
 
 export async function POST(req: Request) {
   const { recipeId } = await req.json();
