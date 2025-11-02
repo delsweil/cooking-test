@@ -1,0 +1,78 @@
+[
+  {
+    "id": "parisian-gnocchi",
+    "title": "Parisian Gnocchi",
+    "steps": [
+      "Boil water with butter and salt; add flour and stir vigorously until smooth dough forms and pulls away from pot.",
+      "Mix in mustard, cheese, and eggs one at a time (stand mixer or by hand); add herbs; transfer to piping bag.",
+      "Let mixture rest 15–25 min; bring salted water to a simmer; pipe dough and cut into 1-inch pieces.",
+      "Cook until gnocchi float; simmer 3 more minutes; lift out and transfer to baking sheet with oil.",
+      "Repeat with remaining dough; cooled gnocchi can be refrigerated until later use."
+    ]
+  },
+  {
+    "id": "buttermilk-brined-southern-fried-chicken",
+    "title": "Buttermilk-Brined Southern Fried Chicken",
+    "steps": [
+      "Mix paprika, black pepper, garlic powder, oregano, cayenne in a bowl.",
+      "Whisk buttermilk, egg, salt, spice mix; add chicken; marinate 4h–overnight in fridge.",
+      "Mix flour, cornstarch, baking powder, salt, remaining spices; dredge chicken, coat thickly.",
+      "Preheat oil to 425°F; fry chicken skin side down; maintain oil temp at 300°F.",
+      "Transfer chicken to rack; bake at 350°F until 150°F breast / 165°F thigh.",
+      "Optional double fry: chill 1h+, then refry at 400°F until extra crisp."
+    ]
+  },
+  {
+    "id": "duck-a-lorange",
+    "title": "Duck à l’Orange",
+    "steps": [
+      "Optional: spatchcock and trim duck; reserve trimmings for stock.",
+      "Prick skin, dip briefly in boiling water, dry thoroughly.",
+      "Season duck all over with salt; rest uncovered 1–24h in fridge.",
+      "Roast trimmings and vegetables until browned; start stock.",
+      "Simmer and reduce stock 1–2h; strain and reduce further.",
+      "Roast duck at high then low temp until well done (~175°F).",
+      "Make caramel gastrique with sugar and vinegar.",
+      "Blanch orange zest until softened.",
+      "Finish sauce: combine stock, juices, gastrique, butter, zest; reduce.",
+      "Carve duck and serve with orange sauce."
+    ]
+  },
+  {
+    "id": "savory-cheese-souffle",
+    "title": "Savory Cheese Soufflé",
+    "steps": [
+      "Preheat oven; prepare ramekin with butter and cheese; chill.",
+      "Make roux and béchamel sauce.",
+      "Season béchamel; add mustard/cayenne; whisk in yolks.",
+      "Whip egg whites with cream of tartar to glossy peaks.",
+      "Fold whites into base; add Gruyère cheese.",
+      "Transfer mixture to ramekin; smooth top.",
+      "Bake until risen and browned (30–40 min).",
+      "Serve immediately before deflating."
+    ]
+  },
+  {
+    "id": "pesto-alla-genovese",
+    "title": "Pesto alla Genovese",
+    "steps": [
+      "Pound garlic to a paste in mortar.",
+      "Add pine nuts; crush to sticky paste.",
+      "Add basil with salt, pound until fine.",
+      "Add cheeses, drizzle oil, emulsify sauce.",
+      "Serve immediately or store with oil layer."
+    ]
+  },
+  {
+    "id": "old-fashioned-apple-pie",
+    "title": "Old-Fashioned Apple Pie",
+    "steps": [
+      "Mix spices in bag; slice apples into wedges.",
+      "Macerate apples in bag 3–8h until volume reduced.",
+      "Add tapioca; assemble pie with top crust; chill.",
+      "Brush pie with egg wash; cut vents.",
+      "Bake at 400°F until center 195°F (~75 min).",
+      "Cool 1h before serving; reheat leftovers if desired."
+    ]
+  }
+]
