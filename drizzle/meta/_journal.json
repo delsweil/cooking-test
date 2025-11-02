@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1762012823334,
-      "tag": "0000_ordinary_vengeance",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1762115354932,
-      "tag": "0001_rich_dust",
+      "when": 1762119871116,
+      "tag": "0000_flippant_sentinels",
       "breakpoints": true
     }
   ]

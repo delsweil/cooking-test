@@ -1,5 +1,5 @@
 {
-  "id": "8beccd68-d4c0-4a4e-a21a-d5729da58079",
+  "id": "59c2b6bf-dee4-4f70-9036-a7f0859b2374",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -43,6 +43,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "consent": {
+          "name": "consent",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
         }
       },
       "indexes": {},
@@ -98,14 +105,14 @@
         },
         "started_at": {
           "name": "started_at",
-          "type": "timestamp with time zone",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
-          "default": "now()"
+          "default": "(extract(epoch from now()) * 1000)::bigint"
         },
         "ended_at": {
           "name": "ended_at",
-          "type": "timestamp with time zone",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": false
         }
@@ -168,28 +175,14 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp with time zone",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
-          "default": "now()"
+          "default": "(extract(epoch from now()) * 1000)::bigint"
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "turns_session_id_sessions_id_fk": {
-          "name": "turns_session_id_sessions_id_fk",
-          "tableFrom": "turns",
-          "tableTo": "sessions",
-          "columnsFrom": [
-            "session_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -208,10 +201,10 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp with time zone",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
-          "default": "now()"
+          "default": "(extract(epoch from now()) * 1000)::bigint"
         }
       },
       "indexes": {},

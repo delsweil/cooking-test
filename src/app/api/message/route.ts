@@ -147,7 +147,9 @@ export async function POST(req: Request) {
     if (saidNext) {
       if (isLastStep || alreadyFinished) {
         if (!alreadyFinished) {
-          await db.update(sessions).set({ endedAt: new Date() }).where(eq(sessions.id, sessionId));
+          await db.update(sessions)
+  .set({ endedAt: Date.now() })
+  .where(eq(sessions.id, sessionId));
         }
         return NextResponse.json({ type: "finished" });
       }
