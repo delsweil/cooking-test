@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db/client";
 import { demographics } from "@/db/schema";
-import { eq } from "drizzle-orm";
 
 export async function POST(req: Request) {
   try {
@@ -12,7 +11,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "userId required" }, { status: 400 });
     }
 
-    // Upsert by primary key (userId)
+    const consentBool = !!consent; // ✅ normalize to boolean
+
     await db
       .insert(demographics)
       .values({
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         cookInterest: typeof cookInterest === "number" ? cookInterest : null,
         experience: experience ?? null,
         other: other ?? null,
-        consent: !!consent, // <— important
+        consent: consentBool, // ✅ boolean
       })
       .onConflictDoUpdate({
         target: demographics.userId,
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
           cookInterest: typeof cookInterest === "number" ? cookInterest : null,
           experience: experience ?? null,
           other: other ?? null,
-          consent: !!consent,
+          consent: consentBool, // ✅ boolean
         },
       });
 

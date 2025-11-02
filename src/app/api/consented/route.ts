@@ -1,37 +1,30 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "@/db/client";
-import { sessions, demographics } from "@/db/schema";
-import { and, eq, gte } from "drizzle-orm";
+import { demographics, sessions } from "@/db/schema";
+import { and, eq, gte, desc } from "drizzle-orm";
 
-function parseSince(range: string | null): number | null {
+// helper to convert ?range=24h|7d|30d into a since timestamp (ms)
+function sinceFromRange(range?: string) {
   const now = Date.now();
-  switch ((range || "all").toLowerCase()) {
-    case "24h":
-    case "1d":
-      return now - 24 * 60 * 60 * 1000;
-    case "7d":
-    case "week":
-      return now - 7 * 24 * 60 * 60 * 1000;
-    case "30d":
-    case "month":
-      return now - 30 * 24 * 60 * 60 * 1000;
-    case "all":
-    default:
-      return null;
-  }
+  if (!range) return undefined;
+  if (range === "24h") return now - 24 * 3600 * 1000;
+  if (range === "7d")  return now - 7  * 24 * 3600 * 1000;
+  if (range === "30d") return now - 30 * 24 * 3600 * 1000;
+  return undefined;
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const range = searchParams.get("range");
-    const since = parseSince(range);
+    const range = searchParams.get("range") ?? undefined;
+    const since = sinceFromRange(range);
 
-    // join sessions to demographics on userId where consent = true
+    // consent is an INTEGER column; compare to 1 (not true)
     const where = since
-      ? and(eq(demographics.consent, true), gte(sessions.startedAt, since))
-      : eq(demographics.consent, true);
+      ? and(eq(demographics.consent, 1), gte(sessions.startedAt, since))
+      : eq(demographics.consent, 1);
 
+    // join sessions ↔ demographics on userId, only consented
     const rows = await db
       .select({
         sessionId: sessions.id,
@@ -43,10 +36,10 @@ export async function GET(req: NextRequest) {
       .from(sessions)
       .innerJoin(demographics, eq(sessions.userId, demographics.userId))
       .where(where)
-      .orderBy(sessions.startedAt);
+      .orderBy(desc(sessions.startedAt));
 
-    return NextResponse.json({ ok: true, range: range || "all", sessions: rows });
+    return NextResponse.json({ rows });
   } catch (e: any) {
-    return NextResponse.json({ ok: false, error: e.message }, { status: 500 });
+    return NextResponse.json({ error: e.message || "server_error" }, { status: 500 });
   }
 }

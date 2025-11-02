@@ -1,5 +1,5 @@
 // src/db/schema.ts  (Postgres)
-import { pgTable, text, integer, bigint, serial } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, boolean, bigint, serial } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
 
@@ -35,11 +35,13 @@ export const turns = pgTable("turns", {
 });
 
 export const demographics = pgTable("demographics", {
-  userId: text("user_id").primaryKey().references(() => users.id),
+  userId: text("user_id").primaryKey(),
   gender: text("gender"),
   age: integer("age"),
   cookInterest: integer("cook_interest"),
   experience: text("experience"),
   other: text("other"),
-  consent: integer("consent").notNull().default(0),
+  // ✅ boolean, default false
+  consent: boolean("consent").notNull().default(false),
 });
+
