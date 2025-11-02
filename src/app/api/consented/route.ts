@@ -1,45 +1,48 @@
-import { NextResponse } from "next/server";
+// src/app/api/consented/route.ts
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/client";
-import { demographics, sessions } from "@/db/schema";
+import { sessions, demographics } from "@/db/schema";
 import { and, eq, gte, desc } from "drizzle-orm";
 
-// helper to convert ?range=24h|7d|30d into a since timestamp (ms)
-function sinceFromRange(range?: string) {
+// parse ?since=24h|7d|30d etc → ms timestamp
+function parseSinceMs(since?: string): number | undefined {
+  if (!since) return;
+  const m = since.match(/^(\d+)\s*([hdw])$/i);
+  if (!m) return;
+  const n = Number(m[1]);
+  const unit = m[2].toLowerCase();
   const now = Date.now();
-  if (!range) return undefined;
-  if (range === "24h") return now - 24 * 3600 * 1000;
-  if (range === "7d")  return now - 7  * 24 * 3600 * 1000;
-  if (range === "30d") return now - 30 * 24 * 3600 * 1000;
-  return undefined;
+  if (unit === "h") return now - n * 60 * 60 * 1000;
+  if (unit === "d") return now - n * 24 * 60 * 60 * 1000;
+  if (unit === "w") return now - n * 7 * 24 * 60 * 60 * 1000;
 }
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const range = searchParams.get("range") ?? undefined;
-    const since = sinceFromRange(range);
+    const sinceParam = searchParams.get("since") || undefined;
+    const sinceMs = parseSinceMs(sinceParam);
 
-    // consent is an INTEGER column; compare to 1 (not true)
-    const where = since
-      ? and(eq(demographics.consent, 1), gte(sessions.startedAt, since))
-      : eq(demographics.consent, 1);
+    // ✅ consent is BOOLEAN now
+    const whereClause = sinceMs
+      ? and(eq(demographics.consent, true), gte(sessions.startedAt, sinceMs))
+      : eq(demographics.consent, true);
 
-    // join sessions ↔ demographics on userId, only consented
     const rows = await db
       .select({
         sessionId: sessions.id,
         userId: sessions.userId,
         recipeId: sessions.recipeId,
-        startedAt: sessions.startedAt,
-        endedAt: sessions.endedAt,
+        startedAt: sessions.startedAt, // bigint ms
       })
       .from(sessions)
-      .innerJoin(demographics, eq(sessions.userId, demographics.userId))
-      .where(where)
-      .orderBy(desc(sessions.startedAt));
+      .innerJoin(demographics, eq(demographics.userId, sessions.userId))
+      .where(whereClause)
+      .orderBy(desc(sessions.startedAt))
+      .limit(500);
 
-    return NextResponse.json({ rows });
+    return NextResponse.json({ ok: true, items: rows });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "server_error" }, { status: 500 });
+    return NextResponse.json({ ok: false, error: e.message ?? "server_error" }, { status: 500 });
   }
 }
